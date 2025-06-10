@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from typing import Annotated
 from passlib.context import CryptContext
 
-from models import Users
-from database import SessionLocal
+from .. import models
+from ..database import SessionLocal
 from .auth import get_current_user, db_dependency
 
 router = APIRouter(
@@ -24,7 +24,7 @@ class UpdatePhoneRequest(BaseModel):
 
 @router.get("/me", status_code=status.HTTP_200_OK)
 async def get_user(user: Annotated[dict, Depends(get_current_user)], db: db_dependency):
-    user_model = db.query(Users).filter(Users.id == user["id"]).first()
+    user_model = db.query(models.Users).filter(models.Users.id == user["id"]).first()
     if not user_model:
         raise HTTPException(status_code=404, detail="User not found")
     return {
@@ -44,7 +44,7 @@ async def change_password(
     db: db_dependency,
     passwords: ChangePasswordRequest
 ):
-    user_model = db.query(Users).filter(Users.id == user["id"]).first()
+    user_model = db.query(models.Users).filter(models.Users.id == user["id"]).first()
     if not user_model:
         raise HTTPException(status_code=404, detail="User not found")
     if not bcrypt_context.verify(passwords.old_password, user_model.hashed_password):
@@ -59,7 +59,7 @@ async def update_phone_number(
     db: db_dependency,
     phone_request: UpdatePhoneRequest
 ):
-    user_model = db.query(Users).filter(Users.id == user["id"]).first()
+    user_model = db.query(models.Users).filter(models.Users.id == user["id"]).first()
     if not user_model:
         raise HTTPException(status_code=404, detail="User not found")
     

@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey, Integer, String, Boolean, Column
-from database import Base
+from .database import Base
 
 class Users(Base):
     __tablename__ = "users"
@@ -17,7 +17,7 @@ class Users(Base):
     def __repr__(self):
         return f"<User(id={self.id}, username={self.username})>"
 
-class TodoS(Base):
+class Todos(Base):
     __tablename__ = "todos"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -28,4 +28,4 @@ class TodoS(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))  # Foreign key to Users table
 
     def __str__(self):
-        return f"TodoS(id={self.id}, title={self.title}, complete={self.complete})"                        
+        return f"Todos(id={self.id}, title={self.title}, complete={self.complete})"

@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from models import Users  
+from .. import models
 from passlib.context import CryptContext
-from database import SessionLocal  # Adjust the import path as needed
+from ..database import SessionLocal  # Adjust the import path as needed
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from typing import Annotated
@@ -65,7 +65,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 def authenticate_user(db: Session, username: str, password: str):
-    user = db.query(Users).filter(Users.username == username).first()
+    user = db.query(models.Users).filter(models.Users.username == username).first()
     if not user:
         return False
     if not bcrypt_context.verify(password, user.hashed_password):
@@ -84,7 +84,7 @@ def create_access_token(username: str, user_id:int, role: str, expires_delta: ti
 
 @router.post("/", status_code=201, response_model=UserResponse)
 async def create_user(db: db_dependency, create_user_request: CreateUserRequest):
-    create_user_model = Users (
+    create_user_model = models.Users (
         username=create_user_request.username,
         hashed_password= bcrypt_context.hash(create_user_request.password),
         email=create_user_request.email,
