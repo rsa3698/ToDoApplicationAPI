@@ -2,8 +2,8 @@ from fastapi import APIRouter,Depends, HTTPException, status, Path
 from typing import Annotated
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
-import models
-from database import SessionLocal
+from .. import models
+from ..database import SessionLocal
 from .auth import get_current_user
 
 
@@ -28,7 +28,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 async def read_all(user: user_dependency, db: db_dependency):
     if user is None or user.get("role", "").lower() != "admin":
         raise HTTPException(status_code=403, detail="Forbidden")
-    return db.query(models.TodoS).all()
+    return db.query(models.Todos).all()
 
 @router.delete("/todo/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_todo(
@@ -39,7 +39,7 @@ async def delete_todo(
     if user is None or user.get("role", "").lower() != "admin":
         raise HTTPException(status_code=403, detail="Forbidden")
     
-    todo_model = db.query(models.TodoS).filter(models.TodoS.id == todo_id).first()
+    todo_model = db.query(models.Todos).filter(models.Todos.id == todo_id).first()
     if not todo_model:
         raise HTTPException(status_code=404, detail="Todo not found")
     

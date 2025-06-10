@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.egg-info/
+.installed.cfg
+*.egg
+.env
+.env.*
+*.db
+*.sqlite3
+
+# Pytest
+.pytest_cache/
+pytest_report.html
+htmlcov/
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

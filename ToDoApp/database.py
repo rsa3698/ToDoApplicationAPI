@@ -9,6 +9,10 @@ POSTGRESQL_DATABASE_URL = "postgresql://postgres:1234@localhost/ToDoApplicationD
 # )
 
 engine = create_engine(POSTGRESQL_DATABASE_URL)
-
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()   
+Base = declarative_base()
+
+
+# Example of how to initialize (call this from main.py or similar)
+# if __name__ == '__main__':
+#     init_db()
